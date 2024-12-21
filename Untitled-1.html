@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envelope de Natal</title>
+    <link rel="icon" href="https://s2.glbimg.com/OQh8ny0vIFSiPS_D42_BWYAnfcE=/620x455/e.glbimg.com/og/ed/f/original/2019/12/09/papai-noel.jpg">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #F5FFFA;
+            margin: 0;
+            flex-direction: column;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .envelope {
+            position: relative;
+            width: 450px;
+            height: 350px;
+            background-color: #006400;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+        }
+
+        .flap {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #8b0000;
+            transform: rotateX(0deg);
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .letter {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://png.pngtree.com/thumb_back/fw800/back_pic/04/06/50/7858103792b15f1.jpg');
+            background-size: cover;
+            background-position: center center;
+            border-radius: 10px 10px 0 0;
+            transition: top 0.5s ease-in-out, opacity 0.5s ease;
+            padding: 30px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 1.2em;
+            color: whitesmoke;
+            opacity: 0;
+            pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.6);
+            flex-direction: column;
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(-180deg);
+        }
+
+        .envelope.open .letter {
+            top: 0;
+            opacity: 1;
+        }
+
+        .letter-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #8b0000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            text-decoration: none;
+        }
+
+        .letter.open .letter-button {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .letter-button:hover {
+            background-color: #006400;
+        }
+
+        .snowflakes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .snowflake {
+            position: absolute;
+            font-size: 10px;
+            animation: floatSnow 12s linear infinite;
+            opacity: 0;
+            mix-blend-mode: lighten;
+        }
+
+        @keyframes floatSnow {
+            0% {
+                transform: translateY(-10px) scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .open-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #8b0000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .open-button:hover {
+            background-color: #006400;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .image-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: floralwhite;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .modal-text {
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #8b0000;
+            cursor: pointer;
+        }
+
+        .modal-image {
+            max-width: 80%;
+            height: auto;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        .modal-text {
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .countdown {
+            margin-top: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #006400;
+        }
+    </style>
+</head>
+<body>
+    <div class="envelope" id="envelope">
+        <div class="flap"></div>
+        <div class="letter">
+            <p>Oi, sogrinha querida! 🎄✨ Quero te desejar um Natal cheio de paz, amor e muita alegria! Que esse momento seja repleto de sorrisos e boas energias, rodeado das pessoas que você tanto ama. Sou muito grato por ter você na minha vida e por todo carinho e apoio que sempre me oferece. Te adoro muito e espero que seu Natal seja tão especial quanto você é! 💖🎅</p>
+            <a href="#" class="letter-button">Imagem</a>
+        </div>
+        <div class="snowflakes" id="snowflakes-container"></div>
+    </div>
+    <button class="open-button" onclick="openEnvelope()">Abrir Envelope</button>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <div class="image-container">
+                <img src="Imagem em família.jpg" alt="Agradecimento">
+            </div>
+            <p class="modal-text">Muito obrigado por ter me aceitado na sua casa, eu sei que não é qualquer um que deixamos entrar, você tem um espaço reservado no meu coração💖. Obrigado por tudo e prometo fazer a Maria muitooo feliz 🫶🏽</p>
+            <p id="countdown" class="countdown"></p>
+        </div>
+    </div>
+
+    <script>
+        const snowEmojis = ['❄', '🎅', '⛄', '🧝'];
+
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const letter = envelope.querySelector('.letter');
+            envelope.classList.toggle('open');
+            letter.classList.add('open');
+        }
+
+        function createSnowflake() {
+            const snowflakesContainer = document.getElementById('snowflakes-container');
+            const snowflake = document.createElement('div');
+            snowflake.className = 'snowflake';
+            const emoji = snowEmojis[Math.floor(Math.random() * snowEmojis.length)];
+            snowflake.textContent = emoji;
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+            snowflake.style.animationDuration = Math.random() * 5 + 12 + 's';
+            snowflakesContainer.appendChild(snowflake);
+            snowflake.addEventListener('animationend', () => {
+                snowflake.remove();
+            });
+        }
+
+        setInterval(createSnowflake, 1000);
+
+        document.querySelector('.letter-button').addEventListener('click', (event) => {
+            event.preventDefault();
+            const modal = document.getElementById('modal');
+            modal.style.display = 'flex';
+        });
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.style.display = 'none';
+        }
+
+        // Adicionando o código do contador
+        function startCountdown() {
+            const targetDate = new Date('2024-04-30T00:00:00').getTime();
+            const countdownElement = document.getElementById('countdown');
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const timeRemaining = targetDate - now;
+
+                if (timeRemaining < 0) {
+                    countdownElement.textContent = 'A data chegou!';
+                    clearInterval(interval);
+                    return;
+                }
+
+                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+                countdownElement.textContent = `Faltam ${days} dias, ${hours} horas, ${minutes} minutos e ${seconds} segundos.`;
+            }
+
+            updateCountdown(); // Atualiza imediatamente
+            const interval = setInterval(updateCountdown, 1000);
+        }
+
+        startCountdown();
+    </script>
+</body>
+</html>
